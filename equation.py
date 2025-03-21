@@ -31,11 +31,11 @@ L = 100  # size of space: LxL
 #p = float(0.5 - (1 / (2 * sqrt(2))))
 #p = 0.1464
 
-p = 1/(1+np.exp(-1/sqrt(2))) # sigmoid of sigmoid of 2 * Ising critical temperature 
-# p = 1/sqrt(2) # sigmoid of 2 * Ising critical temperature
-# p = np.log(1 + sqrt(2)) / 2 # Ising critical temperature 
+#p = 1/(1+np.exp(-1/sqrt(2))) # sigmoid of sigmoid of 2 * Ising critical temperature 
+#p = 1/sqrt(2) # sigmoid of 2 * Ising critical temperature
+#p = np.log(1 + sqrt(2)) / 2 # Ising critical temperature 
 
-#p = float(0.5 + (1 / (2 * sqrt(2))))
+p = float(0.5 + (1 / (2 * sqrt(2))))
 #p = 0.8536
 #print p
 print(p)
@@ -128,7 +128,7 @@ def number_of_Moore_neighbors(x, y):
 
 
 def step():
-    global c, nc, array, array0, array1, count, count0, count1, ratio, ratio1, slope0, slope1, delta, o
+    global c, nc, slope0, slope1, delta, o
     count0 = 0
     count1 = 0
     count = 0
@@ -136,13 +136,10 @@ def step():
     ratio = 0
     i = 0
     j = 0
-    array = []
     array0 = []
     array1 = []
     for x in range(L):
         for y in range(L):
-            if c[x, y] == 1:
-                array.append(c[x, y])
             g = number_of_Moore_neighbors(x, y)
             if c[x, y] == 0:
                 nc[x, y] = 0 if g <= 6 else 1
@@ -171,16 +168,14 @@ def step():
                     if h >= 1:
                         nc[x, y] = 1 if g <= 6 else 0
 
-                    if g / 8 > (1 - p) * p: 
+                    if g / 8 > (1-p) * p: 
                         nc[(x + 1) % L, y] = 1
-                    elif g / 8 < (1 - p) * p:
+                    elif g / 8 < (1-p) * p:
                         nc[(x - 1) % L, y] = 1
                     else:
                         nc[x, y] = 1
             i += 1
             j += g
-    count = len(array)
-    # print count
     count0 = len(array0)
     # print count0
     count1 = len(array1)
@@ -212,7 +207,6 @@ def step():
 
         if ratio1 != 1:
             print (ratio3 / float(ratio1 * ratio1) + (1 / float(ratio1)) - ratio2)
-
     c, nc = nc, c
 
 import pycxsimulator
